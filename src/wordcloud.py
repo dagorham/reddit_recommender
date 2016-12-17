@@ -1,11 +1,12 @@
-from collections import Counter
-from string import punctuation
-from PIL import Image, ImageDraw, ImageFont
-from math import sqrt
-from nltk.corpus import stopwords
-import numpy as np
 import random
 import heapq
+from collections import Counter
+from string import punctuation
+from math import sqrt
+from PIL import Image, ImageDraw, ImageFont
+
+from nltk.corpus import stopwords
+import numpy as np
 
 __name__ = 'wordcloud'
 
@@ -151,12 +152,16 @@ class WordCloud:
         :return: point on the canvas to place the next word, chosen at random from all viable points
         """
 
+        # empty list of legal indices
         possible_indices = []
 
         img_area = img_size[0] * img_size[1]
 
+        # check all point on canvas
         for i in range(0, int_img.shape[0] - img_size[1] - 1):
             for j in range(0, int_img.shape[1] - img_size[0] - 1):
+
+                # calc available space for point i, j
                 sum_at_this_point = self._rectangle_sum((i, j), int_img, img_size)
 
                 if sum_at_this_point >= img_area:
@@ -173,6 +178,7 @@ class WordCloud:
 
         string_in = string_in.lower()
 
+        # remove punction
         for char in string_in:
             if char in punctuation:
                 string_in = string_in.replace(char, "")
@@ -184,4 +190,5 @@ class WordCloud:
             except:
                 continue
 
+        # get rid of stopwords
         return [x for x in string_in.split() if x not in stopwords]
